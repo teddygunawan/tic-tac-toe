@@ -1,0 +1,72 @@
+.board__box {
+    background: #fff;
+    border: 1px solid #999;
+    float: left;
+    font-size: 60px;
+    font-weight: bold;
+    line-height: 90px;
+    height: 90px;
+    margin-right: -1px;
+    margin-top: -2px;
+    text-align: center;
+    width: 33.3%;
+    box-sizing: border-box;
+}
+
+.board__box:hover {
+    background: yellow;
+    cursor:pointer;
+}
+.board__box--win{
+    background:greenyellow;
+}
+
+.board__row {
+    display: table;
+    clear: both;
+    width: inherit;
+    background: #fff;
+}
+
+.board {
+    width: 270px;
+    margin: 0;
+    display: inline-block;
+    box-sizing: border-box;
+    border-collapse: collapse;
+}
+
+.game-container {
+    margin-top: 5rem;
+    text-align: center;
+}
+
+.player-info {
+    margin-bottom: 1rem;
+}
+
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545
+}
+
+.h4{
+    font-size:1.5rem;
+    font-weight:600;
+}
