@@ -4,10 +4,10 @@ let boardBoxes = [];
 let boardSize = 3;
 let player = {
     'O': {
-        name: 'Teddy'
+        'name': 'Teddy'
     },
     'X': {
-        name: 'Gunawan'
+        'name': 'Gunawan'
     }
 }
 let currentPlayer = 'O';

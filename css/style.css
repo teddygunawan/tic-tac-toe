@@ -11,6 +11,7 @@
     text-align: center;
     width: 33.3%;
     box-sizing: border-box;
+    transition: 0.2s ease-out;
 }
 
 .board__box:hover {
