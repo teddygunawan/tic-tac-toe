@@ -9,7 +9,7 @@ let player = {
     'X': {
         'name': 'Gunawan'
     }
-}
+};
 let currentPlayer = 'O';
 let isOver = false;
 let gameContainer = document.getElementById('game');
@@ -20,7 +20,7 @@ let initializeGame = () => {
     createBoard();
     setPlayer();
     gameReset.addEventListener('click', resetGame);
-}
+};
 
 let createBoard = () => {
     let count = 0;
@@ -36,11 +36,11 @@ let createBoard = () => {
         }
         gameContainer.appendChild(row);
     }
-}
+};
 
 let setPlayer = () => {
-    playerContainer.innerHTML = player[currentPlayer]['name'] + "'s Turn";
-}
+    playerContainer.innerHTML = player[currentPlayer].name + "'s Turn";
+};
 
 /* Create the box element for user to click */
 let createBox = (index) => {
@@ -56,25 +56,25 @@ let createBox = (index) => {
 
             let nextPlayer;
             if (currentPlayer == 'O') {
-                nextPlayer = 'X'
+                nextPlayer = 'X';
             } else {
-                nextPlayer = 'O'
+                nextPlayer = 'O';
             }
 
             if (checkWinner()) {
-                playerContainer.innerHTML = `${player[currentPlayer]['name']} Wins!`;
+                playerContainer.innerHTML = `${player[currentPlayer].name} Wins!`;
                 isOver = true;
             } else if (checkDraw()) {
                 playerContainer.innerHTML = 'Draw!';
             } else
-                playerContainer.innerHTML = `${player[nextPlayer]['name']}'s Turn`;
+                playerContainer.innerHTML = `${player[nextPlayer].name}'s Turn`;
 
             currentPlayer = nextPlayer;
         }
-    })
+    });
 
     return box;
-}
+};
 
 /* Create a new DOM element representing a row in the board */
 let createRow = () => {
@@ -82,7 +82,7 @@ let createRow = () => {
     row.className = 'board__row';
 
     return row;
-}
+};
 
 /* Reset the game by changing the related variable and resetting the DOM element */
 let resetGame = () => {
@@ -97,7 +97,7 @@ let resetGame = () => {
             count++;
         }
     }
-}
+};
 
 /* Check if the game is draw, called after every move */
 let checkDraw = () => {
@@ -111,11 +111,11 @@ let checkDraw = () => {
     }
 
     return isDraw;
-}
+};
 
 /* Check for the winner, called after every move */
 let checkWinner = () => {
-    const winConditions = [
+    let winConditions = [
         [0, 1, 2],
         [3, 4, 5],
         [6, 7, 8],
@@ -130,18 +130,18 @@ let checkWinner = () => {
     for (let i = 0; i < conditionsLength; i++) {
         let [a, b, c] = winConditions[i];
         if (boardBoxes[a] && boardBoxes[a] === boardBoxes[b] && boardBoxes[a] === boardBoxes[c]) {
-            markWinningBox(winConditions[i])
+            markWinningBox(winConditions[i]);
             return true;
         }
     }
 
     return false;
-}
+};
 
 let markWinningBox = (conditions)=>{
     conditions.forEach( boxIndex => {
         boardBoxesDOM[boxIndex].className += ' board__box--win';
     });
-}
+};
 
 initializeGame();
