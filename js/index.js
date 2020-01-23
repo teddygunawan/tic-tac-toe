@@ -1,7 +1,7 @@
 /* Global variable declaration */
 let boardBoxesDOM = [];
 let boardBoxes = [];
-let boardSize = 3;
+let boardSize = 9;
 let player = {
     'O': {
         'name': 'Teddy'
@@ -24,10 +24,13 @@ let initializeGame = () => {
 
 let createBoard = () => {
     let count = 0;
+    let width = 100 / boardSize;
+    width = `${width}%`;
     for (let i = 0; i < boardSize; i++) {
         let row = createRow();
         for (let j = 0; j < boardSize; j++) {
             let box = createBox(count);
+            box.style.width = width;
             boardBoxesDOM.push(box);
             row.appendChild(box);
 
@@ -143,5 +146,19 @@ let markWinningBox = (conditions)=>{
         boardBoxesDOM[boxIndex].className += ' board__box--win';
     });
 };
+
+let boardSizeSelector = ()=>{
+    let selectDOM = document.getElementById('boardSize');
+    for(let i = 3; i < 9; i++){
+        let option = document.createElement('option');
+        option.value = i;
+        selectDOM.appendChild(option);
+    }
+
+    selectDOM.addEventListener('select', function(
+        
+    ));
+}
+
 
 initializeGame();
