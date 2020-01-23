@@ -1,7 +1,8 @@
 /* Global variable declaration */
 let boardBoxesDOM = [];
 let boardBoxes = [];
-let boardSize = 9;
+let boardSize = 3;
+let maxBoardSize = 9;
 let player = {
     'O': {
         'name': 'Teddy'
@@ -14,23 +15,22 @@ let currentPlayer = 'O';
 let isOver = false;
 let gameContainer = document.getElementById('game');
 let playerContainer = document.getElementById('player');
-let gameReset = document.getElementById('game-reset');
+let resetBoardDOM = document.getElementById('game-reset');
 
 let initializeGame = () => {
     createBoard();
     setPlayer();
-    gameReset.addEventListener('click', resetGame);
+    initSizeSelector();
+    resetBoardDOM.addEventListener('click', resetBoard);
 };
+
 
 let createBoard = () => {
     let count = 0;
-    let width = 100 / boardSize;
-    width = `${width}%`;
     for (let i = 0; i < boardSize; i++) {
         let row = createRow();
         for (let j = 0; j < boardSize; j++) {
             let box = createBox(count);
-            box.style.width = width;
             boardBoxesDOM.push(box);
             row.appendChild(box);
 
@@ -45,11 +45,25 @@ let setPlayer = () => {
     playerContainer.innerHTML = player[currentPlayer].name + "'s Turn";
 };
 
+let styleBox = (box) => {
+    let width = `${100 / boardSize}%`;
+    let height = `${20 - boardSize}vh`;
+    let lineHeight = height;
+    let fontSize = `${maxBoardSize - (boardSize / 2)}rem`;
+
+    box.style.width = width;
+    box.style.height = height;
+    box.style.lineHeight = lineHeight;
+    box.style.fontSize = fontSize;
+
+    return box;
+}
 /* Create the box element for user to click */
 let createBox = (index) => {
     let box = document.createElement('div');
     box.className = 'board__box';
     box.setAttribute('data-index', index);
+    box = styleBox(box);
 
     box.addEventListener('click', function () {
         if (!isOver && this.innerText == '') {
@@ -87,19 +101,21 @@ let createRow = () => {
     return row;
 };
 
-/* Reset the game by changing the related variable and resetting the DOM element */
-let resetGame = () => {
+/*  Reset the game by changing the related variable and resetting the DOM element. 
+    This function 'resets' the board instead of recreating it. */
+let resetBoard = () => {
     boardBoxes = [];
     isOver = false;
     let count = 0;
     for (let i = 0; i < boardSize; i++) {
         for (let j = 0; j < boardSize; j++) {
             boardBoxesDOM[count].innerHTML = '';
-            boardBoxesDOM[count].className = "board__box";
+            boardBoxesDOM[count].className = 'board__box';
             boardBoxes.push('');
             count++;
         }
     }
+    setPlayer();
 };
 
 /* Check if the game is draw, called after every move */
@@ -118,46 +134,99 @@ let checkDraw = () => {
 
 /* Check for the winner, called after every move */
 let checkWinner = () => {
-    let winConditions = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
-    ];
+    let winningBoxes;
+    // Check Column
+    for (let i = 0; i < boardSize; i++) {
+        winningBoxes = [];
+        for (let j = 0; j < boardSize; j++) {
+            let boxIndex = (boardSize * i) + j;
+            winningBoxes.push(boxIndex);
+            if (boardBoxes[boxIndex] != currentPlayer)
+                break;
+            if (j == boardSize - 1) {
+                markWinningBox(winningBoxes);
+                return true;
+            }
+        }
+    }
 
-    let conditionsLength = winConditions.length;
-    for (let i = 0; i < conditionsLength; i++) {
-        let [a, b, c] = winConditions[i];
-        if (boardBoxes[a] && boardBoxes[a] === boardBoxes[b] && boardBoxes[a] === boardBoxes[c]) {
-            markWinningBox(winConditions[i]);
+    // Check Row
+    for (let i = 0; i < boardSize; i++) {
+        winningBoxes = [];
+        for (let j = 0; j < boardSize; j++) {
+            let boxIndex = (boardSize * j) + i;
+            winningBoxes.push(boxIndex);
+            if (boardBoxes[boxIndex] != currentPlayer)
+                break;
+            if (j == boardSize - 1) {
+                markWinningBox(winningBoxes);
+                return true;
+            }
+        }
+    }
+
+    winningBoxes = [];
+    // Check Diagonal
+    for (let j = 0; j < boardSize; j++) {
+        let boxIndex = (boardSize * j) + j;
+        winningBoxes.push(boxIndex);
+        if (boardBoxes[boxIndex] != currentPlayer)
+            break;
+        if (j == boardSize - 1) {
+            markWinningBox(winningBoxes);
             return true;
         }
+    }
+
+    winningBoxes = [];
+    // Check Reverse Diagonal
+    let count = 0;
+    for (let j = boardSize - 1; j >= 0; j--) {
+        let boxIndex = (j * boardSize) + count;
+        winningBoxes.push(boxIndex);
+        if (boardBoxes[boxIndex] != currentPlayer)
+            break;
+        if (j == 0) {
+            markWinningBox(winningBoxes);
+            return true;
+
+        }
+        count++;
     }
 
     return false;
 };
 
-let markWinningBox = (conditions)=>{
-    conditions.forEach( boxIndex => {
+let markWinningBox = (conditions) => {
+    conditions.forEach(boxIndex => {
         boardBoxesDOM[boxIndex].className += ' board__box--win';
     });
 };
 
-let boardSizeSelector = ()=>{
+/* Recreate the entire board */
+let recreateBoard = () => {
+    boardBoxes = [];
+    boardBoxesDOM = [];
+    while (gameContainer.firstChild) {
+        gameContainer.removeChild(gameContainer.firstChild);
+    }
+    createBoard();
+}
+
+let initSizeSelector = () => {
     let selectDOM = document.getElementById('boardSize');
-    for(let i = 3; i < 9; i++){
+    for (let i = 3; i < maxBoardSize + 1; i++) {
         let option = document.createElement('option');
         option.value = i;
+        option.text = i;
         selectDOM.appendChild(option);
     }
 
-    selectDOM.addEventListener('select', function(
-        
-    ));
+    selectDOM.addEventListener('change', function () {
+        boardSize = this.value;
+        recreateBoard();
+        setPlayer();
+    });
 }
 
 

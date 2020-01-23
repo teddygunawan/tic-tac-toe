@@ -2,10 +2,10 @@
     background: #fff;
     border: 1px solid #999;
     float: left;
-    font-size: 60px;
+    font-size: 4rem;
     font-weight: bold;
-    line-height: 90px;
-    height: 90px;
+    line-height: 6rem;
+    height: 6rem;
     margin-right: -1px;
     margin-top: -2px;
     text-align: center;
@@ -29,7 +29,7 @@
 }
 
 .board {
-    width: 90vw;
+    width: 95vw;
     margin: 0;
     display: inline-block;
     box-sizing: border-box;
@@ -37,7 +37,7 @@
 }
 
 .game-container {
-    margin-top: 5rem;
+    margin-top: 1rem;
     text-align: center;
 }
 
